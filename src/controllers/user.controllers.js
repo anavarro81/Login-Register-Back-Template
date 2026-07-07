@@ -19,31 +19,38 @@ export const register = async (req, res) => {
     console.error("Error en el registro ", error);
 
     if (error.message == "EXISTING_EMAIL") {
-      return res.status(400).json({message: "El email ya existe"})    }
+      return res.status(400).json({ message: "El email ya existe" });
+    }
 
-    return res.status(500).json({error: error});
+    return res.status(500).json({ error: error });
   }
 };
 
 export const login = async (req, res) => {
   try {
     // Comprueba si existe el email en bbdd.
-    const userInfo = await User.findOne({ email: req.body.email });
-    if (!userInfo) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-    // Compara las contraseña introducida con la guarda. Al estar encriptada usamos bcrypt.
-    if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
-      return res.status(404).json({ message: "password incorrecto" });
-    }
-    const token = generateSign(userInfo._id, userInfo.email);
+
+    const user = await authServices.userLogin(req.body);
+
     return res.status(200).json({
-      name: userInfo.name,
-      email: userInfo.email,
-      token: token,
+      id: user.id,
+      identificator: user.identificator,
+      token: user.token,
     });
   } catch (error) {
-    console.log("Se ha producido un error ", error);
-    return res.status(500).json({ error: error });
+    console.error("Se ha producido un error ", error);
+    if (error.message == "IDENTIFICATOR_NOT_VALID") {
+      return res.status(400).json({ message: "Identificador no válido" });
+    }
+
+    if (error.message == "USER_NOT_FOUND") {
+      return res.status(400).json({ message: "Usuario no existe" });
+    }
+
+    if (error.message == "WRONG_PASSWORD") {
+      return res.status(400).json({ message: "Contraseña no valida" });
+    }
+
+    return res.status(500).json({ message: "Error en la base de datos" });
   }
 };

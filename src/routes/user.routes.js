@@ -8,7 +8,7 @@ const userRoutes = express.Router();
 
 
 userRoutes.post('/register', validateUserData, register)
-userRoutes.post('/login', login)
+userRoutes.post('/login', validateUserData, login)
 
 
 
