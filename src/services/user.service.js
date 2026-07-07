@@ -1,0 +1,35 @@
+import User from "../models/user.model.js";
+import {
+  validateEmail,
+  validatePassword,
+  usedEmail,
+  validateDni,
+} from "../utils/validator.js";
+
+import bcrypt from "bcrypt";
+
+import { generateSign } from "../utils/jwt.js";
+
+export const createUser = async (userData) => {
+  const { email, password } = userData;
+
+  const newUser = new User(userData);
+
+  if (email) {
+    const existingEmail = await usedEmail(email);
+
+    if (existingEmail) {
+      throw new Error("EXISTING_EMAIL");
+    }
+  }
+
+  // Se encripta la password antes de guardarla en la bbdd.
+  newUser.password = bcrypt.hashSync(password, 10);
+
+  // Guardar el usuario
+  const createdUser = await newUser.save();
+
+  return createdUser;
+};
+
+export const userLogin = (userData) => {};

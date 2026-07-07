@@ -7,6 +7,14 @@
 4. 
 
 
+El registro y el login estan preparados para hacerlo con cualquiera de los siguientes identificadores, ademas de la password. 
+
+- email 
+- name 
+- Dni
+
+Independientemente de cual se use para la autenticación se validará y se consultar por el mismo en la bbdd. 
+
 # Endpoints
 
 El Login y registro esta preparados para hacer el registro y el login con los campos: `email` y `password`

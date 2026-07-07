@@ -17,4 +17,37 @@ const usedEmail = async (email) => {
   return users.length;
 };
 
-export { validateEmail, validatePassword, usedEmail };
+
+/*
+Validacion de DNI.
+- Debe contener: Formato: 8 números y 1 letra, sin espacios ni guiones  
+- Se debe comprobar que el resto de la división coincide con la letra de control. 
+*/
+const validateDni = (dni) => {
+  if (typeof dni !== "string") return false;
+  // 
+  const regex = /^\d{8}[A-Za-z]$/;
+  if (!regex.test(dni)) return false;
+
+  const number = parseInt(dni.slice(0, 8), 10);
+  const letter = dni.charAt(8).toUpperCase();
+  const control = "TRWAGMYFPDXBNJZSQVHLCKE";
+  const expected = control[number % 23];
+  return expected === letter;
+};
+
+const validateName = (name) => { 
+  if (!name) {
+    return false;
+  }
+
+  // (letras y números, de 3 a 10 caracteres)
+  const regex = /^[a-zA-Z0-9]{3,10}$/;
+
+  return regex.test(name);
+
+
+}
+
+
+export { validateEmail, validatePassword, usedEmail, validateDni, validateName };

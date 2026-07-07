@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import * as authServices from "../services/user.service.js";
 
 import {
   validateEmail,
@@ -6,41 +6,22 @@ import {
   usedEmail,
 } from "../utils/validator.js";
 
-import bcrypt from "bcrypt";
-
-import { generateSign } from "../utils/jwt.js";
-
 export const register = async (req, res) => {
   try {
-    const newUser = new User(req.body);
+    const createdUser = await authServices.createUser(req.body);
 
-    const { email, password } = req.body;
-
-    if (!validateEmail(email)) {
-      return res.status(400).json({ message: "email no valido" });
-    }
-
-    if (!validatePassword(password)) {
-      return res.status(400).json({ message: " password no valido " });
-    }
-
-    if (await usedEmail(email)) {
-      return res
-        .status(400)
-        .json({ message: " El email introducido ya existe " });
-    }
-
-    // Se encripta la password antes de guardarla en la bbdd.
-    newUser.password = bcrypt.hashSync(newUser.password, 10);
-
-    const createUser = await newUser.save();
-
-    if (createUser) {
-      return res.status(201).json(createUser);
-    }
+    return res.status(201).json({
+      id: createdUser._id,
+      identificator: createdUser.name || createdUser.dni || createdUser.email,
+      role: createdUser.role,
+    });
   } catch (error) {
     console.error("Error en el registro ", error);
-    res.status(500).json(error);
+
+    if (error.message == "EXISTING_EMAIL") {
+      return res.status(400).json({message: "El email ya existe"})    }
+
+    return res.status(500).json({error: error});
   }
 };
 
