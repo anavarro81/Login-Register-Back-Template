@@ -2,6 +2,7 @@
   "name": "login-register-back-template",
   "version": "1.0.0",
   "description": "Back template con Login y Registro",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

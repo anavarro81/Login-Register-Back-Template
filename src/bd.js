@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv").config();
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-const DB_URL= process.env.BD_URI
+const DB_URL = process.env.BD_URI;
 
-const connect = async()=> {
-    try {
-        const db = await mongoose.connect(DB_URL);
-        const {name,host} = db.connection;
-        
-        console.log(`Conectado a ${name} DB en el host : ${host}`);
+const connect = async () => {
+  try {
+    const db = await mongoose.connect(DB_URL);
+    const { name, host } = db.connection;
 
-    } catch (error) {
-        console.log(`Error conectando la base de datos: ${error}`);
-    }
-}
+    console.log(`Conectado a ${name} DB en el host : ${host}`);
+  } catch (error) {
+    console.log(`Error conectando la base de datos: ${error}`);
+  }
+};
 
-module.exports = {connect}
+export { connect };

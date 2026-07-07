@@ -1,28 +1,30 @@
-const User = require("../models/user.model");
+import User from "../models/user.model.js";
 
-const {
+import {
   validateEmail,
   validatePassword,
   usedEmail,
-} = require("../utils/validator");
+} from "../utils/validator.js";
 
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
-const { generateSign } = require("../utils/jwt");
+import { generateSign } from "../utils/jwt.js";
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const newUser = new User(req.body);
 
-    if (!validateEmail(newUser.email)) {
+    const { email, password } = req.body;
+
+    if (!validateEmail(email)) {
       return res.status(400).json({ message: "email no valido" });
     }
 
-    if (!validatePassword(newUser.password)) {
+    if (!validatePassword(password)) {
       return res.status(400).json({ message: " password no valido " });
     }
 
-    if (await usedEmail(newUser.email)) {
+    if (await usedEmail(email)) {
       return res
         .status(400)
         .json({ message: " El email introducido ya existe " });
@@ -42,7 +44,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     // Comprueba si existe el email en bbdd.
     const userInfo = await User.findOne({ email: req.body.email });
@@ -54,17 +56,13 @@ const login = async (req, res) => {
       return res.status(404).json({ message: "password incorrecto" });
     }
     const token = generateSign(userInfo._id, userInfo.email);
-    return res
-      .status(200)
-      .json({
-        name: userInfo.name,
-        email: userInfo.email,
-        token: token,
-      });
+    return res.status(200).json({
+      name: userInfo.name,
+      email: userInfo.email,
+      token: token,
+    });
   } catch (error) {
     console.log("Se ha producido un error ", error);
     return res.status(500).json({ error: error });
   }
 };
-
-module.exports = { register, login };

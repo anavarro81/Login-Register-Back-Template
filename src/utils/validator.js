@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+import User from "../models/user.model.js";
 
 const validateEmail = (email) => {
   const regex =
@@ -17,4 +17,4 @@ const usedEmail = async (email) => {
   return users.length;
 };
 
-module.exports = { validateEmail, validatePassword, usedEmail };
+export { validateEmail, validatePassword, usedEmail };

@@ -1,6 +1,6 @@
-const express = require ('express')
+import express from 'express'
 
-const {register, login} = require ('../controllers/user.controllers')
+import { register, login } from '../controllers/user.controllers.js'
 
 // Definie un enrutador modular para gestionar todas las rutas de usuarios. 
 const userRoutes = express.Router();
@@ -11,4 +11,4 @@ userRoutes.post('/login', login)
 
 
 
-module.exports = {userRoutes}
+export { userRoutes }

@@ -9,6 +9,10 @@
 
 # Endpoints
 
+El Login y registro esta preparados para hacer el registro y el login con los campos: `email` y `password`
+
+
+
 ## Registro
 
 URL: http://localhost:5000/users/register -> registro de usuario
@@ -19,5 +23,20 @@ URL: http://localhost:5000/users/register -> registro de usuario
 }
 
 
-## Registro
+## Login
+
+URL: http://localhost:5000/users/login
+
+{
+    "email": "antonio@gmail.com",
+    "password": "123Abc@99"    
+}
+
+Si se necesitan otros campos, por ejemplo, para registrarse con nombre o con DNI.
+
+- Incluir este campo en el modelo como obligatorio
+- Validar en el controlador el campo (obligatorio y formato)
+
+
+
 
